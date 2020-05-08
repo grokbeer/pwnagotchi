@@ -42,10 +42,16 @@ FILES_TO_BACKUP="/root/brain.nn \
   /root/peers \
   /etc/pwnagotchi/ \
   /etc/ssh/ \
+  /etc/localtime \
+  /etc/timezone \
   /var/log/pwnagotchi.log \
   /var/log/pwnagotchi*.gz \
+  /var/log/pwngrid-peer.log \
+  /var/log/pwngrid-peer*.gz \
+  /var/tmp/pwnagotchi/sessions \
   /home/pi/.ssh \
   /home/pi/.bashrc \
+  /home/pi/.bash_aliases \
   /home/pi/.profile"
 
 ping -c 1 "${UNIT_HOSTNAME}" > /dev/null 2>&1 || {
@@ -54,4 +60,4 @@ ping -c 1 "${UNIT_HOSTNAME}" > /dev/null 2>&1 || {
 }
 
 echo "@ backing up $UNIT_HOSTNAME to $OUTPUT ..."
-ssh "${UNIT_USERNAME}@${UNIT_HOSTNAME}" "sudo find ${FILES_TO_BACKUP} -type f -print0 | xargs -0 sudo tar cv" | gzip -9 > "$OUTPUT"
+ssh "${UNIT_USERNAME}@${UNIT_HOSTNAME}" "sudo tar cvf - ${FILES_TO_BACKUP}" | gzip -9 > "$OUTPUT"
